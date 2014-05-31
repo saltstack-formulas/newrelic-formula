@@ -4,7 +4,7 @@ newrelic-sysmond:
 
   file.append:
     - name: /etc/newrelic/nrsysmond.cfg
-    - text: license_key: {{ salt['grains.get']('newrelic:apikey', '') }}
+    - text: "license_key: {{ salt['grains.get']('newrelic:apikey', '') }}"
     - require:
         - pkg: newrelic-sysmond
 
