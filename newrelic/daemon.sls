@@ -1,3 +1,3 @@
 newrelic-daemon:
   service.running:
-    - reload: True
+    - full_restart: True
