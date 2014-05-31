@@ -8,7 +8,7 @@ newrelic-php:
   {% elif grains['os_family'] == 'Debian' %}
     - name: /etc/php5/apache/conf.d/10-newrelic.ini
   {% endif %}
-    - content: newrelic.license="{{ salt['grains.get']('newrelic:apikey', '') }}"
+    - content: newrelic.license="{{ salt['pillar.get']('newrelic:apikey', '') }}"
     - makedirs: True
     - watch_in:
         - service: newrelic-daemon
