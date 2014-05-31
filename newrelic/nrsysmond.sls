@@ -1,5 +1,6 @@
 newrelic-sysmond:
-  pkg.installed
+  pkg:
+    - installed
 
   file.append:
     - name: /etc/newrelic/nrsysmond.cfg
