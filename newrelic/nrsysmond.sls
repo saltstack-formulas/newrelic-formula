@@ -2,9 +2,10 @@ newrelic-sysmond:
   pkg:
     - installed
 
-  file.append:
+  file.replace:
     - name: /etc/newrelic/nrsysmond.cfg
-    - text: "license_key: {{ salt['pillar.get']('newrelic:apikey', '') }}"
+    - pattern: "license_key=REPLACE_WITH_REAL_KEY"
+    - repl: "license_key={{ salt['pillar.get']('newrelic:apikey', '') }}"
     - require:
         - pkg: newrelic-sysmond
 
