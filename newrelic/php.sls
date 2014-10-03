@@ -6,7 +6,7 @@ newrelic-php:
   {% if grains['os_family'] == 'RedHat' %}
     - name: /etc/php.d/newrelic.ini
   {% elif grains['os_family'] == 'Debian' %}
-    - name: /etc/php5/apache2/conf.d/newrelic.ini
+    - name: /etc/php5/mods-available/newrelic.ini
   {% endif %}
     - pattern: 'newrelic.license = .*'
     - repl: newrelic.license = "{{ salt['pillar.get']('newrelic:apikey', '') }}"
@@ -15,3 +15,19 @@ newrelic-php:
         - service: newrelic-daemon
     - require:
         - pkg: newrelic-php5
+
+newrelic-appname:
+  file.replace:
+  {% if grains['os_family'] == 'RedHat' %}
+    - name: /etc/php.d/newrelic.ini
+  {% elif grains['os_family'] == 'Debian' %}
+    - name: /etc/php5/mods-available/newrelic.ini
+  {% endif %}
+    - pattern: 'newrelic.appname = "PHP Application"'
+    - repl: newrelic.appname = "{{ salt['pillar.get']('newrelic:appname', '') }}"
+    - makedirs: True
+    - watch_in:
+        - service: newrelic-daemon
+    - require:
+        - pkg: newrelic-php5
+
