@@ -27,3 +27,8 @@ extend:
       - name: /usr/local/zend/etc/conf.d/newrelic.ini
       - watch_in:
         - service: php5-fpm
+  newrelic-appname:
+    file.replace:
+      - name: /usr/local/zend/etc/conf.d/newrelic.ini
+      - watch_in:
+        - service: php5-fpm
