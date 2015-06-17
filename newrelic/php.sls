@@ -2,14 +2,6 @@ newrelic-php:
   pkg.installed:
     - name: newrelic-php5
 
-  file.directory:
-  {% if grains['os_family'] == 'RedHat' %}
-    - name: /etc/php.d
-  {% elif grains['os_family'] == 'Debian' %}
-    - name: /etc/php5/mods-available
-  {% endif %}
-    - makedirs: True
-
   file.replace:
   {% if grains['os_family'] == 'RedHat' %}
     - name: /etc/php.d/newrelic.ini
@@ -22,6 +14,15 @@ newrelic-php:
         - service: newrelic-daemon
     - require:
         - pkg: newrelic-php5
+
+newrelic-files-folder:
+  file.directory:
+  {% if grains['os_family'] == 'RedHat' %}
+    - name: /etc/php.d
+  {% elif grains['os_family'] == 'Debian' %}
+    - name: /etc/php5/mods-available
+  {% endif %}
+    - makedirs: True
 
 newrelic-appname:
   file.replace:
