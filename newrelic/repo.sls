@@ -1,7 +1,7 @@
 newrelic-repo:
   {% if grains['os_family'] == 'RedHat' -%}
   pkg.installed:
-    - sources: 
+    - sources:
       - newrelic-repo: http://yum.newrelic.com/pub/newrelic/el5/i386/newrelic-repo-5-3.noarch.rpm
   {% elif grains['os_family'] == 'Debian' -%}
   pkgrepo.managed:
@@ -13,6 +13,6 @@ newrelic-repo:
   {% endif %}
     - require_in:
         {% if salt['pkg.list_pkgs']().get('php', False) -%}
-        - pkg: newrelic-php5
+        - pkg: newrelic-php
         {% endif %}
         - pkg: newrelic-sysmond
