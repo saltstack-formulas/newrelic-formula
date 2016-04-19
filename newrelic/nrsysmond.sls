@@ -2,10 +2,17 @@ newrelic-sysmond:
   pkg:
     - installed
 
-  file.replace:
+  # comment out the default
+  Non Target sudo:
+  file.comment:
     - name: /etc/newrelic/nrsysmond.cfg
-    - pattern: "license_key=REPLACE_WITH_REAL_KEY"
-    - repl: "license_key={{ salt['pillar.get']('newrelic:apikey', '') }}"
+    - regex: ^license_key=REPLACE_WITH_REAL_KEY
+    
+  file.blockreplace:
+    - name: /etc/newrelic/nrsysmond.cfg
+    - marker_start: '#-- salt managed license key zone --'
+    - marker_end: '#-- end salt managed license key --'
+    - content: license_key={{ salt['pillar.get']('newrelic:apikey', '') }}
     - require:
         - pkg: newrelic-sysmond
 
