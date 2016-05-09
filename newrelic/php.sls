@@ -15,7 +15,7 @@ newrelic-php:
     - watch_in:
         - service: newrelic-daemon
     - require:
-        - pkg: newrelic-php5
+        - pkg: newrelic-php
 
 newrelic-files-folder:
   file.directory:
@@ -38,7 +38,7 @@ newrelic-appname:
     - watch_in:
         - service: newrelic-daemon
     - require:
-        - pkg: newrelic-php5
+        - pkg: newrelic-php
 
 newrelic-explain_uncomment:
   file.uncomment:
@@ -62,5 +62,5 @@ newrelic-explain_enabled:
     - watch_in:
         - service: newrelic-daemon
     - require:
-        - pkg: newrelic-php5
+        - pkg: newrelic-php
 
