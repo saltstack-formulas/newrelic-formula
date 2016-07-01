@@ -2,7 +2,6 @@ newrelic-sysmond:
   pkg:
     - installed
   service.running:
-    - reload: True
     - watch:
         - pkg: newrelic-sysmond
         - file: /etc/newrelic/nrsysmond.cfg
@@ -20,6 +19,7 @@ add_licence_key:
     - append_if_not_found: True
     - marker_start: '#-- salt managed license key zone --'
     - marker_end: '#-- end salt managed license key --'
-    - content: license_key={{ salt['pillar.get']('newrelic:apikey', '') }}
+    - content: |
+        license_key={{ salt['pillar.get']('newrelic:apikey', '') }}
     - require:
         - pkg: newrelic-sysmond
