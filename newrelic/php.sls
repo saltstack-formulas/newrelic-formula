@@ -1,4 +1,6 @@
-
+newrelic-daemon:
+  service.running:
+    - full_restart: True
 
 newrelic-php:
   pkg.installed:

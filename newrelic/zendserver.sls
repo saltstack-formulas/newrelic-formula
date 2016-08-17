@@ -1,6 +1,5 @@
 # This extends the NewRelic formula with support for Zend Server's alternative setup
 include:
-  - newrelic.daemon
   - newrelic.php
 
 # Copy the library library file
