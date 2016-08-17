@@ -1,6 +1,10 @@
+include:
+  - repo
+
 newrelic-sysmond:
-  pkg:
-    - installed
+  pkg.installed:
+    - require:
+      - sls: repo
   service.running:
     - watch:
         - pkg: newrelic-sysmond
