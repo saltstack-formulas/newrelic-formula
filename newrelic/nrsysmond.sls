@@ -2,7 +2,6 @@ newrelic-sysmond:
   pkg:
     - installed
   service.running:
-    - reload: True
     - watch:
         - pkg: newrelic-sysmond
         - file: /etc/newrelic/nrsysmond.cfg
