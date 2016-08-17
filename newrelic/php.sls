@@ -9,7 +9,7 @@ newrelic-php:
   pkg.installed:
     - name: newrelic-php5
     - require:
-      - sls: repo
+      - sls: newrelic-repo
 
   file.replace:
   {% if grains['os_family'] == 'RedHat' %}
