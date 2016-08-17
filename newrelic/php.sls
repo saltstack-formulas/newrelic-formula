@@ -1,5 +1,5 @@
 include:
-  - repo
+  - newrelic.repo
 
 newrelic-daemon:
   service.running:
@@ -9,7 +9,7 @@ newrelic-php:
   pkg.installed:
     - name: newrelic-php5
     - require:
-      - sls: newrelic-repo
+      - sls: newrelic.repo
 
   file.replace:
   {% if grains['os_family'] == 'RedHat' %}

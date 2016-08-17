@@ -1,10 +1,10 @@
 include:
-  - repo
+  - newrelic.repo
 
 newrelic-sysmond:
   pkg.installed:
     - require:
-      - sls: newrelic-repo
+      - sls: newrelic.repo
   service.running:
     - watch:
         - pkg: newrelic-sysmond
