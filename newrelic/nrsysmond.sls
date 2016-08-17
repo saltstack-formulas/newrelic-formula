@@ -13,7 +13,7 @@ newrelic-sysmond:
 comment_default_licence_key:
   file.comment:
     - name: /etc/newrelic/nrsysmond.cfg
-    - regex: ^license_key=REPLACE_WITH_REAL_KEY
+    - regex: ^license_key=
     - require:
         - pkg: newrelic-sysmond
 
