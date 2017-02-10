@@ -25,8 +25,9 @@ newrelic-daemon:
 
 {% for file in salt['cmd.run']('find /etc/php* | grep newrelic.ini').splitlines() %}
 
-{{ file }}:
+set_license_in_{{ file }}:
   file.replace:
+    - name: {{ file }}
     - pattern: 'newrelic.license = .*'
     - repl: newrelic.license = "{{ salt['pillar.get']('newrelic:apikey', '') }}"
     - watch_in:
@@ -34,8 +35,9 @@ newrelic-daemon:
     - require:
         - pkg: newrelic-php
 
-{{ file }}:
+set_appname_in_{{ file }}:
   file.replace:
+    - name: {{ file }}
     - pattern: 'newrelic.appname = "PHP Application"'
     - repl: newrelic.appname = "{{ salt['pillar.get']('newrelic:appname', '') }}"
     - watch_in:
@@ -43,13 +45,15 @@ newrelic-daemon:
     - require:
         - pkg: newrelic-php
 
-{{ file }}:
+uncomment_detailed_transaction_logs_in_{{ file }}:
   file.uncomment:
+    - name: {{ file }}
     - regex: ^newrelic.transaction_tracer.explain_enabled
     - char : ;
 
-{{ file }}:
+set_detailed_transaction_logs_in_{{ file }}:
   file.replace:
+    - name: {{ file }}
     - pattern: 'newrelic.transaction_tracer.explain_enabled = .*'
     - repl: newrelic.transaction_tracer.explain_enabled = {{ salt['pillar.get']('newrelic:explain_enable', 'true') }}
     - watch_in:
