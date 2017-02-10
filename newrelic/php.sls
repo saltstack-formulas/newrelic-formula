@@ -1,22 +1,32 @@
 include:
   - newrelic.repo
 
-newrelic-daemon:
-  service.running:
-    - full_restart: True
-
 newrelic-php:
   pkg.installed:
     - name: newrelic-php5
     - require:
       - sls: newrelic.repo
 
+/etc/newrelic/newrelic.cfg:
+  file.copy:
+    - source: /etc/newrelic/newrelic.cfg.template
+    - user: root
+    - group: root
+    - mode: 0640
+    - require:
+        - pkg: newrelic-php
+
+newrelic-daemon:
+  service.running:
+    - enable: True
+    - full_restart: True
+    - require:
+        - file: /etc/newrelic/newrelic.cfg
+
+{% for file in salt['cmd.run']('find /etc/php* | grep newrelic.ini').splitlines() %}
+
+{{ file }}:
   file.replace:
-  {% if grains['os_family'] == 'RedHat' %}
-    - name: /etc/php.d/newrelic.ini
-  {% elif grains['os_family'] == 'Debian' %}
-    - name: /etc/php5/mods-available/newrelic.ini
-  {% endif %}
     - pattern: 'newrelic.license = .*'
     - repl: newrelic.license = "{{ salt['pillar.get']('newrelic:apikey', '') }}"
     - watch_in:
@@ -24,22 +34,8 @@ newrelic-php:
     - require:
         - pkg: newrelic-php
 
-newrelic-files-folder:
-  file.directory:
-  {% if grains['os_family'] == 'RedHat' %}
-    - name: /etc/php.d
-  {% elif grains['os_family'] == 'Debian' %}
-    - name: /etc/php5/mods-available
-  {% endif %}
-    - makedirs: True
-
-newrelic-appname:
+{{ file }}:
   file.replace:
-  {% if grains['os_family'] == 'RedHat' %}
-    - name: /etc/php.d/newrelic.ini
-  {% elif grains['os_family'] == 'Debian' %}
-    - name: /etc/php5/mods-available/newrelic.ini
-  {% endif %}
     - pattern: 'newrelic.appname = "PHP Application"'
     - repl: newrelic.appname = "{{ salt['pillar.get']('newrelic:appname', '') }}"
     - watch_in:
@@ -47,23 +43,13 @@ newrelic-appname:
     - require:
         - pkg: newrelic-php
 
-newrelic-explain_uncomment:
+{{ file }}:
   file.uncomment:
-  {% if grains['os_family'] == 'RedHat' %}
-    - name: /etc/php.d/newrelic.ini
-  {% elif grains['os_family'] == 'Debian' %}
-    - name: /etc/php5/mods-available/newrelic.ini
-  {% endif %}
     - regex: ^newrelic.transaction_tracer.explain_enabled
     - char : ;
 
-newrelic-explain_enabled:
+{{ file }}:
   file.replace:
-  {% if grains['os_family'] == 'RedHat' %}
-    - name: /etc/php.d/newrelic.ini
-  {% elif grains['os_family'] == 'Debian' %}
-    - name: /etc/php5/mods-available/newrelic.ini
-  {% endif %}
     - pattern: 'newrelic.transaction_tracer.explain_enabled = .*'
     - repl: newrelic.transaction_tracer.explain_enabled = {{ salt['pillar.get']('newrelic:explain_enable', 'true') }}
     - watch_in:
@@ -71,3 +57,4 @@ newrelic-explain_enabled:
     - require:
         - pkg: newrelic-php
 
+{% endfor %}
