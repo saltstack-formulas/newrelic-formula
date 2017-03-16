@@ -24,6 +24,7 @@ newrelic-daemon:
         - file: /etc/newrelic/newrelic.cfg
 
 {% for file in salt['cmd.run']('find /etc/php* | grep newrelic.ini').splitlines() %}
+{% if "find:" not in file %}
 
 set_license_in_{{ file }}:
   file.replace:
@@ -61,4 +62,5 @@ set_detailed_transaction_logs_in_{{ file }}:
     - require:
         - pkg: newrelic-php
 
+{% endif %}
 {% endfor %}
