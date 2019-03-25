@@ -1,6 +1,10 @@
+include:
+  - newrelic.repo
+
 newrelic-sysmond:
-  pkg:
-    - installed
+  pkg.installed:
+    - require:
+      - sls: newrelic.repo
   service.running:
     - watch:
         - pkg: newrelic-sysmond
@@ -9,7 +13,7 @@ newrelic-sysmond:
 comment_default_licence_key:
   file.comment:
     - name: /etc/newrelic/nrsysmond.cfg
-    - regex: ^license_key=REPLACE_WITH_REAL_KEY
+    - regex: ^license_key=
     - require:
         - pkg: newrelic-sysmond
 
@@ -19,7 +23,6 @@ add_licence_key:
     - append_if_not_found: True
     - marker_start: '#-- salt managed license key zone --'
     - marker_end: '#-- end salt managed license key --'
-    - content: |
-        license_key={{ salt['pillar.get']('newrelic:apikey', '') }}
+    - content: "license_key={{ salt['pillar.get']('newrelic:apikey', '') }} "
     - require:
         - pkg: newrelic-sysmond
