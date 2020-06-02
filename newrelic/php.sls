@@ -64,3 +64,26 @@ newrelic-explain_enabled:
     - require:
         - pkg: newrelic-php
 
+newrelic-auto_instrument_uncomment:
+  file.uncomment:
+  {% if grains['os_family'] == 'RedHat' %}
+    - name: /etc/php.d/newrelic.ini
+  {% elif grains['os_family'] == 'Debian' %}
+    - name: /etc/php5/mods-available/newrelic.ini
+  {% endif %}
+    - regex: ^newrelic.browser_monitoring.auto_instrument
+    - char : ;
+
+newrelic-auto_instrument_enabled:
+  file.replace:
+  {% if grains['os_family'] == 'RedHat' %}
+    - name: /etc/php.d/newrelic.ini
+  {% elif grains['os_family'] == 'Debian' %}
+    - name: /etc/php5/mods-available/newrelic.ini
+  {% endif %}
+    - pattern: 'newrelic.browser_monitoring.auto_instrument = .*'
+    - repl: newrelic.browser_monitoring.auto_instrument = {{ salt['pillar.get']('newrelic:auto_instrument', 'false') }}
+    - watch_in:
+        - service: newrelic-daemon
+    - require:
+        - pkg: newrelic-php
