@@ -11,8 +11,3 @@ newrelic-repo:
     - keyid: 548C16BF
     - keyserver: keyserver.ubuntu.com
   {% endif %}
-    - require_in:
-        {% if salt['pkg.list_pkgs']().get('php', False) -%}
-        - pkg: newrelic-php
-        {% endif %}
-        - pkg: newrelic-sysmond
